@@ -39,6 +39,8 @@ public class SchetsWin : Form
                                 , new LijnTool()
                                 , new RechthoekTool()
                                 , new VolRechthoekTool()
+                                , new CirkelTool()
+                                , new VolCirkelTool()
                                 , new TekstTool()
                                 , new GumTool()
                                 };
@@ -147,15 +149,20 @@ public class SchetsWin : Form
         Button rotate = new Button(); paneel.Controls.Add(rotate);
         rotate.Text = "Rotate"; 
         rotate.Location = new Point( 80, 0); 
-        rotate.Click += schetscontrol.Roteer; 
-           
+        rotate.Click += schetscontrol.Roteer;
+
+        Button saveimg = new Button(); paneel.Controls.Add(saveimg);
+        saveimg.Text = "Save img";
+        saveimg.Location = new Point(160, 0);
+        saveimg.Click += schetscontrol.Schets.SaveBitmap;
+
         Label penkleur = new Label(); paneel.Controls.Add(penkleur);
         penkleur.Text = "Penkleur:"; 
-        penkleur.Location = new Point(180, 3); 
+        penkleur.Location = new Point(260, 3); 
         penkleur.AutoSize = true;               
             
         ComboBox cbb = new ComboBox(); paneel.Controls.Add(cbb);
-        cbb.Location = new Point(240, 0); 
+        cbb.Location = new Point(320, 0); 
         cbb.DropDownStyle = ComboBoxStyle.DropDownList; 
         cbb.SelectedValueChanged += schetscontrol.VeranderKleur;
         foreach (string k in kleuren)

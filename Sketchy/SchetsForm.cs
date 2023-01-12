@@ -18,6 +18,8 @@ namespace Sketchy
                                 , new LijnTool()
                                 , new RechthoekTool()
                                 , new VolRechthoekTool()
+                                , new CirkelTool()
+                                , new VolCirkelTool()
                                 , new TekstTool()
                                 , new GumTool()
                                 };

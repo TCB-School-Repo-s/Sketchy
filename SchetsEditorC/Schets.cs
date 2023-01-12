@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 
 public class Schets
 {
@@ -30,6 +31,17 @@ public class Schets
     public void Teken(Graphics gr)
     {
         gr.DrawImage(bitmap, 0, 0);
+    }
+
+    public void SaveBitmap(Object o, EventArgs e)
+    {
+        using (SaveFileDialog saveFileDialog = new SaveFileDialog() { Filter = @"PNG|*.png|JPEG|*.jpeg|BMP|*.bmp" })
+        {
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                bitmap.Save(saveFileDialog.FileName);
+            }
+        }
     }
     public void Schoon()
     {
