@@ -13,7 +13,7 @@ public class SchetsEditor : Form
         this.Controls.Add(menuStrip);
         this.maakFileMenu();
         this.maakHelpMenu();
-        this.Text = "Schets editor";
+        this.Text = "Sketchy";
         this.IsMdiContainer = true;
         this.MainMenuStrip = menuStrip;
     }

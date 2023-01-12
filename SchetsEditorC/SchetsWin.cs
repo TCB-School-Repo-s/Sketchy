@@ -156,13 +156,18 @@ public class SchetsWin : Form
         saveimg.Location = new Point(160, 0);
         saveimg.Click += schetscontrol.Schets.SaveBitmap;
 
+        Button openimg = new Button(); paneel.Controls.Add(openimg);
+        openimg.Text = "Open img";
+        openimg.Location = new Point(240, 0);
+        openimg.Click += schetscontrol.OpenBitmap;
+
         Label penkleur = new Label(); paneel.Controls.Add(penkleur);
         penkleur.Text = "Penkleur:"; 
-        penkleur.Location = new Point(260, 3); 
+        penkleur.Location = new Point(340, 3); 
         penkleur.AutoSize = true;               
             
         ComboBox cbb = new ComboBox(); paneel.Controls.Add(cbb);
-        cbb.Location = new Point(320, 0); 
+        cbb.Location = new Point(400, 0); 
         cbb.DropDownStyle = ComboBoxStyle.DropDownList; 
         cbb.SelectedValueChanged += schetscontrol.VeranderKleur;
         foreach (string k in kleuren)

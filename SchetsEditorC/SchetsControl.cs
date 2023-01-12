@@ -53,4 +53,20 @@ public class SchetsControl : UserControl
     {   string kleurNaam = ((ToolStripMenuItem)obj).Text;
         penkleur = Color.FromName(kleurNaam);
     }
+
+    public void OpenBitmap(object o, EventArgs e)
+    {
+        using (OpenFileDialog dlg = new OpenFileDialog())
+        {
+            dlg.Title = "Open Image";
+            dlg.Filter = "Image Files (*.bmp;*.jpg;*.jpeg,*.png)|*.BMP;*.JPG;*.JPEG;*.PNG";
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                this.Schets.ImportBitmap(new Bitmap(dlg.FileName));
+            }
+        }
+        this.Invalidate();
+    }
+    
 }

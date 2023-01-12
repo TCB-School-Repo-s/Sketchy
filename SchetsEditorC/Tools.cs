@@ -20,6 +20,7 @@ public abstract class StartpuntTool : ISchetsTool
     }
     public virtual void MuisLos(SchetsControl s, Point p)
     {   kwast = new SolidBrush(s.PenKleur);
+        s.Schets.AddSketchElement(new SchetsElement(this, startpunt, p, s.PenKleur));
     }
     public abstract void MuisDrag(SchetsControl s, Point p);
     public abstract void Letter(SchetsControl s, char c);
@@ -36,7 +37,7 @@ public class TekstTool : StartpuntTool
         if (c >= 32)
         {
             Graphics gr = s.MaakBitmapGraphics();
-            Font font = new Font("Tahoma", 40);
+            Font font = new Font("Tahoma", 20);
             string tekst = c.ToString();
             SizeF sz = 
             gr.MeasureString(tekst, font, this.startpunt, StringFormat.GenericTypographic);
@@ -149,4 +150,51 @@ public class GumTool : PenTool
     public override void Bezig(Graphics g, Point p1, Point p2)
     {   g.DrawLine(MaakPen(Brushes.White, 7), p1, p2);
     }
+}
+
+public class BetterGum : StartpuntTool
+{
+    public override string ToString() { return "bettergum"; }
+
+    public override void MuisDrag(SchetsControl s, Point p)
+    {
+    }
+    
+    public override void MuisLos(SchetsControl s, Point p)
+    {
+    }
+
+    public override void Letter(SchetsControl s, char c)
+    {
+    }
+}
+
+public class SchetsElement
+{
+    ISchetsTool tool;
+    Point beginPunt;
+    Point eindPunt;
+    Color kleur;
+    string? text;
+
+    public SchetsElement(ISchetsTool tool, Point beginPunt, Point eindPunt, Color kleur, string? text = null)
+    {
+        this.tool = tool;
+        this.beginPunt = beginPunt;
+        this.eindPunt = eindPunt;
+        this.kleur = kleur;
+        this.text = text;
+    }
+
+    public void Draw(Graphics gr)
+    {
+        
+    }
+
+    public Color GetColor()
+    {
+        return kleur;
+    }
+
+    
 }

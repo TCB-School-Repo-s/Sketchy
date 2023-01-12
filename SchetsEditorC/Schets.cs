@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
 public class Schets
 {
     private Bitmap bitmap;
-        
+    public List<SchetsElement> sketchElements = new List<SchetsElement>();
+    
     public Schets()
     {
         bitmap = new Bitmap(1, 1);
@@ -31,6 +33,10 @@ public class Schets
     public void Teken(Graphics gr)
     {
         gr.DrawImage(bitmap, 0, 0);
+        foreach(SchetsElement element in sketchElements)
+        {
+            element.Draw(gr);
+        }
     }
 
     public void SaveBitmap(Object o, EventArgs e)
@@ -43,6 +49,24 @@ public class Schets
             }
         }
     }
+    
+    public void ImportBitmap(Bitmap bp)
+    {
+        bitmap = bp;
+    }
+
+    public void AddSketchElement(SchetsElement element)
+    {
+        sketchElements.Add(element);
+        SchetsElement first = sketchElements[0];
+        Debug.WriteLine(first.GetColor().Name);
+    }
+
+    public void RemoveSketchElement(SchetsElement element)
+    {
+        sketchElements.Remove(element);
+    }
+    
     public void Schoon()
     {
         Graphics gr = Graphics.FromImage(bitmap);
@@ -52,4 +76,5 @@ public class Schets
     {
         bitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
     }
+
 }

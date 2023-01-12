@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sketchy", "Sketchy\Sketchy.csproj", "{4E9E4FF6-5507-4756-AEBC-A883C1C1D2EF}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "7.5-SchetsEditorC", "SchetsEditorC\7.5-SchetsEditorC.csproj", "{F44C8A71-B82A-48E0-A9AC-1B029B8570B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sketchy", "Sketchy\Sketchy.csproj", "{2CBB8E11-E02B-4908-B60D-C2563EBC59CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4E9E4FF6-5507-4756-AEBC-A883C1C1D2EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4E9E4FF6-5507-4756-AEBC-A883C1C1D2EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4E9E4FF6-5507-4756-AEBC-A883C1C1D2EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4E9E4FF6-5507-4756-AEBC-A883C1C1D2EF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F44C8A71-B82A-48E0-A9AC-1B029B8570B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F44C8A71-B82A-48E0-A9AC-1B029B8570B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F44C8A71-B82A-48E0-A9AC-1B029B8570B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F44C8A71-B82A-48E0-A9AC-1B029B8570B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CBB8E11-E02B-4908-B60D-C2563EBC59CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CBB8E11-E02B-4908-B60D-C2563EBC59CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CBB8E11-E02B-4908-B60D-C2563EBC59CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CBB8E11-E02B-4908-B60D-C2563EBC59CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
