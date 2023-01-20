@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 
 public class SchetsWin : Form
@@ -10,7 +11,8 @@ public class SchetsWin : Form
     ISchetsTool huidigeTool;
     Panel paneel;
     bool vast;
-
+    public bool changes;
+    
     private void veranderAfmeting(object o, EventArgs ea)
     {
         schetscontrol.Size = new Size ( this.ClientSize.Width  - 70
@@ -30,7 +32,20 @@ public class SchetsWin : Form
 
     private void afsluiten(object obj, EventArgs ea)
     {
+        
         this.Close();
+    }
+    
+    private void checkchange(object obj, FormClosingEventArgs e)
+    {
+        if (changes==true)
+        {
+            DialogResult stillclose = MessageBox.Show("Are you sure you want to close without saving?", "Unsaved changes", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (stillclose != DialogResult.Yes)
+            {
+                e.Cancel = true;
+            }
+        }
     }
 
     public SchetsWin()
@@ -52,7 +67,7 @@ public class SchetsWin : Form
         schetscontrol = new SchetsControl();
         schetscontrol.Location = new Point(64, 10);
         schetscontrol.MouseDown += (object o, MouseEventArgs mea) =>
-                                    {   vast=true;  
+                                    {   vast=true; changes = true; 
                                         huidigeTool.MuisVast(schetscontrol, mea.Location); 
                                     };
         schetscontrol.MouseMove += (object o, MouseEventArgs mea) =>
@@ -79,6 +94,7 @@ public class SchetsWin : Form
         this.maakActieButtons(deKleuren);
         this.Resize += this.veranderAfmeting;
         this.veranderAfmeting(null, null);
+        this.FormClosing += this.checkchange;
     }
 
     private void maakFileMenu()
