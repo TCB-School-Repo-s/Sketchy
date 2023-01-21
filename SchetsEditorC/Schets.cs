@@ -9,7 +9,7 @@ public class Schets
 {
     private Bitmap bitmap;
     public List<SchetsElement> sketchElements = new List<SchetsElement>();
-    public bool changes { get; set; }
+    public bool sketchChanged { get; set; }
     public Schets()
     {
         bitmap = new Bitmap(1, 1);
@@ -45,9 +45,10 @@ public class Schets
         using (SaveFileDialog saveFileDialog = new SaveFileDialog() { Filter = @"PNG|*.png|JPEG|*.jpeg|BMP|*.bmp" })
         {   
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            {   changes = false;
+            {
+                this.sketchChanged = false;
                 bitmap.Save(saveFileDialog.FileName);
-                Debug.WriteLine(changes);
+                Debug.WriteLine(this.sketchChanged);
             }
         }
     }

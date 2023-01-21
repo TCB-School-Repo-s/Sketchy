@@ -36,9 +36,9 @@ public class SchetsWin : Form
         this.Close();
     }
     
-    private void checkchange(object obj, FormClosingEventArgs e)
+    private void onFormClose(object obj, FormClosingEventArgs e)
     {
-        if (changes==true)
+        if (this.schetscontrol.Schets.sketchChanged)
         {
             DialogResult stillclose = MessageBox.Show("Are you sure you want to close without saving?", "Unsaved changes", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (stillclose != DialogResult.Yes)
@@ -67,7 +67,8 @@ public class SchetsWin : Form
         schetscontrol = new SchetsControl();
         schetscontrol.Location = new Point(64, 10);
         schetscontrol.MouseDown += (object o, MouseEventArgs mea) =>
-                                    {   vast=true; changes = true; 
+                                    {
+                                        vast = true; this.schetscontrol.Schets.sketchChanged = true;
                                         huidigeTool.MuisVast(schetscontrol, mea.Location); 
                                     };
         schetscontrol.MouseMove += (object o, MouseEventArgs mea) =>
@@ -94,7 +95,7 @@ public class SchetsWin : Form
         this.maakActieButtons(deKleuren);
         this.Resize += this.veranderAfmeting;
         this.veranderAfmeting(null, null);
-        this.FormClosing += this.checkchange;
+        this.FormClosing += this.onFormClose;
     }
 
     private void maakFileMenu()
