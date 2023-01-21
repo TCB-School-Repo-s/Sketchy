@@ -77,7 +77,7 @@ public class SchetsWin : Form
                                     };
         schetscontrol.MouseUp   += (object o, MouseEventArgs mea) =>
                                     {   if (vast)
-                                        huidigeTool.MuisLos (schetscontrol, mea.Location);
+                                        huidigeTool.MuisLos(schetscontrol, mea.Location);
                                         vast = false; 
                                     };
         schetscontrol.KeyPress +=  (object o, KeyPressEventArgs kpea) => 
@@ -190,5 +190,10 @@ public class SchetsWin : Form
         foreach (string k in kleuren)
             cbb.Items.Add(k);
         cbb.SelectedIndex = 0;
+
+        Button saveproject = new Button(); paneel.Controls.Add(saveproject);
+        saveproject.Text = "Save Project";
+        saveproject.Location = new Point(480, 0);
+        saveproject.Click += schetscontrol.Schets.SaveProject;
     }
 }

@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
-
+using System.Text.Json;
+using System.IO;
 
 public class Schets
 {
     private Bitmap bitmap;
-    public List<SchetsElement> sketchElements = new List<SchetsElement>();
+    public LinkedList<SchetsElement> sketchElements = new LinkedList<SchetsElement>();
     public bool sketchChanged { get; set; }
     public Schets()
     {
@@ -36,7 +37,7 @@ public class Schets
         gr.DrawImage(bitmap, 0, 0);
         foreach(SchetsElement element in sketchElements)
         {
-            element.Draw(gr);
+            Debug.WriteLine(element.type);
         }
     }
 
@@ -52,6 +53,19 @@ public class Schets
             }
         }
     }
+
+    public void SaveProject(Object o, EventArgs e)
+    {
+        var project = JsonSerializer.Serialize(sketchElements);
+        using (SaveFileDialog saveFileDialog = new SaveFileDialog() { Filter = @"Sketchy|*.sketchy" })
+        {
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                using StreamWriter file = new(saveFileDialog.FileName);
+                file.WriteLineAsync(project);
+            }
+        }
+    }
     
     public void ImportBitmap(Bitmap bp)
     {
@@ -60,9 +74,7 @@ public class Schets
 
     public void AddSketchElement(SchetsElement element)
     {
-        sketchElements.Add(element);
-        SchetsElement first = sketchElements[0];
-        Debug.WriteLine(first.GetColor().Name);
+        sketchElements.AddFirst(element);
     }
 
     public void RemoveSketchElement(SchetsElement element)
