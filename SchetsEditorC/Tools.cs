@@ -169,32 +169,38 @@ public class BetterGum : StartpuntTool
     }
 }
 
+public enum ElementType
+{
+    FilledEllipse,
+    EmptyEllipse,
+    FilledRectangle,
+    EmptyRectangle,
+    Text,
+    Line,
+}
+
+
 public class SchetsElement
 {
-    ISchetsTool tool;
-    Point beginPunt;
-    Point eindPunt;
-    Color kleur;
-    string? text;
+    public ElementType type { get; set; }
+    public Point beginPunt { get; set; }
+    public Point eindPunt { get; set; }
+    public Color kleur { get; set; }
+    public string? text { get; set; }
 
-    public SchetsElement(ISchetsTool tool, Point beginPunt, Point eindPunt, Color kleur, string? text = null)
+    public SchetsElement(ElementType type, Point beginPunt, Point eindPunt, Color kleur) : this(type, beginPunt, eindPunt, kleur, null)
     {
-        this.tool = tool;
+    }
+
+    public SchetsElement(ElementType type, Point beginPunt, Point eindPunt, Color kleur, string text)
+    {
+        this.type = type;
         this.beginPunt = beginPunt;
         this.eindPunt = eindPunt;
         this.kleur = kleur;
         this.text = text;
     }
 
-    public void Draw(Graphics gr)
-    {
-        
-    }
-
-    public Color GetColor()
-    {
-        return kleur;
-    }
-
+    
     
 }
