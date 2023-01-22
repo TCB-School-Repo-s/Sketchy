@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Text.Json.Serialization;
 
 public interface ISchetsTool
 {
@@ -84,11 +85,8 @@ public abstract class TweepuntTool : StartpuntTool
     {
     }
     public abstract void Bezig(Graphics g, Point p1, Point p2, SchetsControl s);
-        
-    public virtual void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
-    {   
-        this.Bezig(g, p1, p2, s);
-    }
+
+    public abstract void Compleet(Graphics g, Point p1, Point p2, SchetsControl s);
 }
 
 public class RechthoekTool : TweepuntTool
@@ -102,7 +100,6 @@ public class RechthoekTool : TweepuntTool
 
     public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
     {
-        base.Compleet(g, p1, p2, s);
         s.Schets.AddSketchElement(new SchetsElement(ElementType.EmptyRectangle, p1, p2, s.PenKleur));
     }
 }
@@ -130,7 +127,6 @@ public class CirkelTool : TweepuntTool
 
     public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
     {
-        base.Compleet(g, p1, p2, s);
         s.Schets.AddSketchElement(new SchetsElement(ElementType.EmptyEllipse, p1, p2, s.PenKleur));
     }
 }
@@ -157,7 +153,6 @@ public class LijnTool : TweepuntTool
 
     public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
     {
-        base.Compleet(g, p1, p2, s);
         s.Schets.AddSketchElement(new SchetsElement(ElementType.Line, p1, p2, s.PenKleur));
     }
 }
@@ -202,17 +197,35 @@ public class SchetsElement
     public Color kleur { get; set; }
     public string? text { get; set; }
 
-    public SchetsElement(ElementType type, Point beginPunt, Point eindPunt, Color kleur) : this(type, beginPunt, eindPunt, kleur, null)
-    {
-    }
 
-    public SchetsElement(ElementType type, Point beginPunt, Point eindPunt, Color kleur, string text)
+    [JsonConstructor]
+    public SchetsElement(ElementType type, Point beginPunt, Point eindPunt, Color kleur, string? text = null)
     {
         this.type = type;
         this.beginPunt = beginPunt;
         this.eindPunt = eindPunt;
         this.kleur = kleur;
         this.text = text;
+    }
+
+    public void DrawElement(Graphics gr)
+    {
+        switch (type)
+        {
+            case ElementType.EmptyEllipse:
+                gr.DrawEllipse(new Pen(kleur, 3), TweepuntTool.Punten2Rechthoek(beginPunt, eindPunt));
+                break;
+            case ElementType.FilledEllipse:
+                gr.FillEllipse(new SolidBrush(kleur), TweepuntTool.Punten2Rechthoek(beginPunt, eindPunt));
+                break;
+            case ElementType.EmptyRectangle:
+                gr.DrawRectangle(new Pen(kleur, 3), TweepuntTool.Punten2Rechthoek(beginPunt, eindPunt));
+                break;
+            case ElementType.FilledRectangle:
+                gr.FillRectangle(new SolidBrush(kleur), TweepuntTool.Punten2Rechthoek(beginPunt, eindPunt));
+                break;
+        }
+            
     }
 
     

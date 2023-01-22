@@ -130,6 +130,8 @@ public class SchetsWin : Form
             submenu.DropDownItems.Add(k, null, schetscontrol.VeranderKleurViaMenu);
         menu.DropDownItems.Add(submenu);
         menuStrip.Items.Add(menu);
+        menu.DropDownItems.Add("Save project", null, schetscontrol.Schets.SaveProject);
+        menu.DropDownItems.Add("Open project", null, schetscontrol.Schets.OpenProject);
     }
 
     private void maakToolButtons(ICollection<ISchetsTool> tools)
@@ -190,10 +192,5 @@ public class SchetsWin : Form
         foreach (string k in kleuren)
             cbb.Items.Add(k);
         cbb.SelectedIndex = 0;
-
-        Button saveproject = new Button(); paneel.Controls.Add(saveproject);
-        saveproject.Text = "Save Project";
-        saveproject.Location = new Point(480, 0);
-        saveproject.Click += schetscontrol.Schets.SaveProject;
     }
 }

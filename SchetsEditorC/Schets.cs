@@ -9,7 +9,7 @@ using System.IO;
 public class Schets
 {
     private Bitmap bitmap;
-    public LinkedList<SchetsElement> sketchElements = new LinkedList<SchetsElement>();
+    public List<SchetsElement> sketchElements = new List<SchetsElement>();
     public bool sketchChanged { get; set; }
     public Schets()
     {
@@ -37,7 +37,7 @@ public class Schets
         gr.DrawImage(bitmap, 0, 0);
         foreach(SchetsElement element in sketchElements)
         {
-            Debug.WriteLine(element.type);
+            element.DrawElement(gr);
         }
     }
 
@@ -56,13 +56,27 @@ public class Schets
 
     public void SaveProject(Object o, EventArgs e)
     {
-        var project = JsonSerializer.Serialize(sketchElements);
+        var project = JsonSerializer.Serialize<List<SchetsElement>>(sketchElements);
         using (SaveFileDialog saveFileDialog = new SaveFileDialog() { Filter = @"Sketchy|*.sketchy" })
         {
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 using StreamWriter file = new(saveFileDialog.FileName);
                 file.WriteLineAsync(project);
+            }
+        }
+    }
+
+    public void OpenProject(Object o, EventArgs e)
+    {
+        using (OpenFileDialog openFileDialog = new OpenFileDialog() { Filter = @"Sketchy|*.sketchy" })
+        {
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                using StreamReader file = new(openFileDialog.FileName);
+                var project = file.ReadToEnd();
+                sketchElements = JsonSerializer.Deserialize<List<SchetsElement>>(project);
+                Debug.WriteLine(sketchElements[0].kleur);
             }
         }
     }
@@ -74,7 +88,7 @@ public class Schets
 
     public void AddSketchElement(SchetsElement element)
     {
-        sketchElements.AddFirst(element);
+        sketchElements.Add(element);
     }
 
     public void RemoveSketchElement(SchetsElement element)
