@@ -224,6 +224,9 @@ public class SchetsElement
             case ElementType.FilledRectangle:
                 gr.FillRectangle(new SolidBrush(kleur), TweepuntTool.Punten2Rechthoek(beginPunt, eindPunt));
                 break;
+            case ElementType.Line:
+                gr.DrawLine(new Pen(kleur, 3), beginPunt, eindPunt);
+                break;
         }
             
     }

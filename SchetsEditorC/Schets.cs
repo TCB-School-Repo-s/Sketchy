@@ -9,7 +9,7 @@ using System.IO;
 public class Schets
 {
     private Bitmap bitmap;
-    public List<SchetsElement> sketchElements = new List<SchetsElement>();
+    public LinkedList<SchetsElement> sketchElements = new LinkedList<SchetsElement>();
     public bool sketchChanged { get; set; }
     public Schets()
     {
@@ -56,7 +56,7 @@ public class Schets
 
     public void SaveProject(Object o, EventArgs e)
     {
-        var project = JsonSerializer.Serialize<List<SchetsElement>>(sketchElements);
+        var project = JsonSerializer.Serialize<LinkedList<SchetsElement>>(sketchElements);
         using (SaveFileDialog saveFileDialog = new SaveFileDialog() { Filter = @"Sketchy|*.sketchy" })
         {
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
@@ -75,8 +75,8 @@ public class Schets
             {
                 using StreamReader file = new(openFileDialog.FileName);
                 var project = file.ReadToEnd();
-                sketchElements = JsonSerializer.Deserialize<List<SchetsElement>>(project);
-                Debug.WriteLine(sketchElements[0].kleur);
+                sketchElements = JsonSerializer.Deserialize<LinkedList<SchetsElement>>(project);
+                Debug.WriteLine(sketchElements.First.Value.kleur);
             }
         }
     }
@@ -88,7 +88,7 @@ public class Schets
 
     public void AddSketchElement(SchetsElement element)
     {
-        sketchElements.Add(element);
+        sketchElements.AddLast(element);
     }
 
     public void RemoveSketchElement(SchetsElement element)
@@ -98,8 +98,10 @@ public class Schets
     
     public void Schoon()
     {
+        sketchElements.Clear();
         Graphics gr = Graphics.FromImage(bitmap);
         gr.FillRectangle(Brushes.White, 0, 0, bitmap.Width, bitmap.Height);
+        
     }
     public void Roteer()
     {

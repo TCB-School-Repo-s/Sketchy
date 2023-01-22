@@ -50,8 +50,8 @@ public class SchetsWin : Form
 
     public SchetsWin()
     {
-        ISchetsTool[] deTools = { new PenTool()         
-                                , new LijnTool()
+        ISchetsTool[] deTools = { /*new PenTool()         
+                                ,*/ new LijnTool()
                                 , new RechthoekTool()
                                 , new VolRechthoekTool()
                                 , new CirkelTool()

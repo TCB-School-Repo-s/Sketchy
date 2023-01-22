@@ -16,7 +16,14 @@ public class SchetsEditor : Form
         this.Text = "Sketchy";
         this.IsMdiContainer = true;
         this.MainMenuStrip = menuStrip;
+        this.Load += SchetsEditor_Load;
     }
+    
+    private void SchetsEditor_Load(object sender, EventArgs e)
+    {
+        this.nieuw(true, e);
+    }
+
     private void maakFileMenu()
     {   
         ToolStripDropDownItem menu = new ToolStripMenuItem("File");
@@ -24,6 +31,7 @@ public class SchetsEditor : Form
         menu.DropDownItems.Add("Exit", null, this.afsluiten);
         menuStrip.Items.Add(menu);
     }
+    
     private void maakHelpMenu()
     {   
         ToolStripDropDownItem menu = new ToolStripMenuItem("Help");
@@ -43,6 +51,7 @@ public class SchetsEditor : Form
     {   
         SchetsWin s = new SchetsWin();
         s.MdiParent = this;
+        if (sender is bool && (bool)sender) s.WindowState = FormWindowState.Maximized;
         s.Show();
     }
     private void afsluiten(object sender, EventArgs e)
