@@ -5,14 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-public class TextToolControl : TextBox
-{
+public class TextToolControl : TextBox {
 
-    public TextToolControl()
-    {
-
-    }
-
-
+  public TextToolControl() {}
 }
-
