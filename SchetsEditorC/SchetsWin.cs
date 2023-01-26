@@ -51,7 +51,7 @@ public class SchetsWin : Form
     public SchetsWin()
     {
         ISchetsTool[] deTools = { /*new PenTool()         
-                                ,*/ new LijnTool()
+                                , */new LijnTool()
                                 , new RechthoekTool()
                                 , new VolRechthoekTool()
                                 , new CirkelTool()
@@ -131,7 +131,7 @@ public class SchetsWin : Form
         menu.DropDownItems.Add(submenu);
         menuStrip.Items.Add(menu);
         menu.DropDownItems.Add("Save project", null, schetscontrol.Schets.SaveProject);
-        menu.DropDownItems.Add("Open project", null, schetscontrol.Schets.OpenProject);
+        menu.DropDownItems.Add("Open project", null, schetscontrol.OpenProject);
     }
 
     private void maakToolButtons(ICollection<ISchetsTool> tools)

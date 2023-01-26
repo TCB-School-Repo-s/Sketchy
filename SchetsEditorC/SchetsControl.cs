@@ -54,6 +54,11 @@ public class SchetsControl : UserControl
         penkleur = Color.FromName(kleurNaam);
     }
 
+    public void OpenProject(object o, EventArgs e)
+    {
+        this.schets.OpenProject();
+        this.Invalidate();
+    }
     public void OpenBitmap(object o, EventArgs e)
     {
         using (OpenFileDialog dlg = new OpenFileDialog())

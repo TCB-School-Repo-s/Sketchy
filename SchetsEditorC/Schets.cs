@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Text.Json;
+using Newtonsoft.Json;
 using System.IO;
 
 public class Schets
@@ -34,11 +34,11 @@ public class Schets
     }
     public void Teken(Graphics gr)
     {
-        gr.DrawImage(bitmap, 0, 0);
-        foreach(SchetsElement element in sketchElements)
+        foreach (SchetsElement element in sketchElements)
         {
-            element.DrawElement(gr);
+            element.DrawElement(this.BitmapGraphics);
         }
+        gr.DrawImage(bitmap, 0, 0);
     }
 
     public void SaveBitmap(Object o, EventArgs e)
@@ -56,7 +56,7 @@ public class Schets
 
     public void SaveProject(Object o, EventArgs e)
     {
-        var project = JsonSerializer.Serialize<LinkedList<SchetsElement>>(sketchElements);
+        var project = JsonConvert.SerializeObject(sketchElements);
         using (SaveFileDialog saveFileDialog = new SaveFileDialog() { Filter = @"Sketchy|*.sketchy" })
         {
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
@@ -67,7 +67,7 @@ public class Schets
         }
     }
 
-    public void OpenProject(Object o, EventArgs e)
+    public void OpenProject()
     {
         using (OpenFileDialog openFileDialog = new OpenFileDialog() { Filter = @"Sketchy|*.sketchy" })
         {
@@ -75,7 +75,7 @@ public class Schets
             {
                 using StreamReader file = new(openFileDialog.FileName);
                 var project = file.ReadToEnd();
-                sketchElements = JsonSerializer.Deserialize<LinkedList<SchetsElement>>(project);
+                sketchElements = JsonConvert.DeserializeObject<LinkedList<SchetsElement>>(project);
                 Debug.WriteLine(sketchElements.First.Value.kleur);
             }
         }
