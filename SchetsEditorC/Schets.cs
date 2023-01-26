@@ -8,7 +8,7 @@ using System.IO;
 
 public class Schets
 {
-    private Bitmap bitmap;
+    public Bitmap bitmap { get; private set; }
     public LinkedList<SchetsElement> sketchElements = new LinkedList<SchetsElement>();
     ColorDialog colorDialog = new ColorDialog();
     public bool sketchChanged { get; set; }

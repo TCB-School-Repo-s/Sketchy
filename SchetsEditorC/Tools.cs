@@ -100,7 +100,7 @@ public class RechthoekTool : TweepuntTool
     {   
         g.DrawRectangle(MaakPen(kwast,3), TweepuntTool.Punten2Rechthoek(p1, p2));
     }
-
+    
     public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
     {
         s.Schets.AddSketchElement(new SchetsElement(ElementType.EmptyRectangle, p1, p2, s.PenKleur));
@@ -113,7 +113,6 @@ public class VolRechthoekTool : RechthoekTool
 
     public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
     {   
-        g.FillRectangle(kwast, TweepuntTool.Punten2Rechthoek(p1, p2));
         s.Schets.AddSketchElement(new SchetsElement(ElementType.FilledRectangle, p1, p2, s.PenKleur));
     }
 
@@ -140,7 +139,6 @@ public class VolCirkelTool : CirkelTool
 
     public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
     {
-        g.FillEllipse(kwast, TweepuntTool.Punten2Rechthoek(p1, p2));
         s.Schets.AddSketchElement(new SchetsElement(ElementType.FilledEllipse, p1, p2, s.PenKleur));
     }
 }
@@ -174,25 +172,32 @@ public class PenTool : LijnTool
 public class GumTool : ISchetsTool
 {
     public override string ToString() { return "gum"; }
-
-    private Point clickPoint;
     public void Letter(SchetsControl s, char c)
     { 
     }
-
+    
     public void MuisDrag(SchetsControl s, Point p)
     {
         
     }
-
+    
     public void MuisLos(SchetsControl s, Point p)
     {
-        
+        for(LinkedListNode<SchetsElement> node = s.Schets.sketchElements.Last; node != null; node = node.Previous)
+        {
+            SchetsElement el = node.Value;
+            if (p.X >= el.bounds.Left && p.Y >= el.bounds.Top && p.X <= el.bounds.Right && p.Y <= el.bounds.Bottom)
+            {
+                s.Schets.sketchElements.Remove(node);
+                s.Schets.BitmapGraphics.FillRectangle(Brushes.White, 0, 0, s.Schets.bitmap.Width, s.Schets.bitmap.Height);
+                s.Invalidate();
+                break;
+            }
+        }
     }
 
     public void MuisVast(SchetsControl s, Point p)
     {
-        clickPoint = p;
     }
 }
 
@@ -214,16 +219,19 @@ public class SchetsElement
     public Point eindPunt { get; set; }
     public Color kleur { get; set; }
     public string? text { get; set; }
+    public Rectangle bounds { get; set; }
 
+    public Guid uid { get; }
 
-    [JsonConstructor]
     public SchetsElement(ElementType type, Point beginPunt, Point eindPunt, Color kleur, string? text = null)
     {
         this.type = type;
+        this.uid = Guid.NewGuid();
         this.beginPunt = beginPunt;
         this.eindPunt = eindPunt;
         this.kleur = kleur;
         this.text = text;
+        this.bounds = TweepuntTool.Punten2Rechthoek(beginPunt, eindPunt);
     }
 
     public void DrawElement(Graphics gr)
