@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text.Json.Serialization;
+using System.Xml.Linq;
 
 public interface ISchetsTool
 {
@@ -98,12 +99,14 @@ public class RechthoekTool : TweepuntTool
 
     public override void Bezig(Graphics g, Point p1, Point p2, SchetsControl s)
     {   
-        g.DrawRectangle(MaakPen(kwast,3), TweepuntTool.Punten2Rechthoek(p1, p2));
+        g.DrawRectangle(MaakPen(kwast,3), Punten2Rechthoek(p1, p2));
     }
     
     public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
     {
-        s.Schets.AddSketchElement(new SchetsElement(ElementType.EmptyRectangle, p1, p2, s.PenKleur));
+        GraphicsPath path = new GraphicsPath();
+        path.AddRectangle(Punten2Rechthoek(p1, p2));
+        s.Schets.AddSketchElement(new SchetsElement(path, p1, p2, s.PenKleur));
     }
 }
     
@@ -112,8 +115,10 @@ public class VolRechthoekTool : RechthoekTool
     public override string ToString() { return "vlak"; }
 
     public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
-    {   
-        s.Schets.AddSketchElement(new SchetsElement(ElementType.FilledRectangle, p1, p2, s.PenKleur));
+    {
+        GraphicsPath path = new GraphicsPath();
+        path.AddRectangle(Punten2Rechthoek(p1, p2));
+        s.Schets.AddSketchElement(new SchetsElement(path, p1, p2, s.PenKleur, null, true));
     }
 
 }
@@ -124,12 +129,14 @@ public class CirkelTool : TweepuntTool
 
     public override void Bezig(Graphics g, Point p1, Point p2, SchetsControl s)
     {
-        g.DrawEllipse(MaakPen(kwast, 3), TweepuntTool.Punten2Rechthoek(p1, p2));
+        g.DrawEllipse(MaakPen(kwast, 3), Punten2Rechthoek(p1, p2));
     }
 
     public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
     {
-        s.Schets.AddSketchElement(new SchetsElement(ElementType.EmptyEllipse, p1, p2, s.PenKleur));
+        GraphicsPath path = new GraphicsPath();
+        path.AddEllipse(Punten2Rechthoek(p1, p2));
+        s.Schets.AddSketchElement(new SchetsElement(path, p1, p2, s.PenKleur));
     }
 }
 
@@ -139,7 +146,9 @@ public class VolCirkelTool : CirkelTool
 
     public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
     {
-        s.Schets.AddSketchElement(new SchetsElement(ElementType.FilledEllipse, p1, p2, s.PenKleur));
+        GraphicsPath path = new GraphicsPath();
+        path.AddEllipse(Punten2Rechthoek(p1, p2));
+        s.Schets.AddSketchElement(new SchetsElement(path, p1, p2, s.PenKleur, null, true));
     }
 }
 
@@ -154,7 +163,9 @@ public class LijnTool : TweepuntTool
 
     public override void Compleet(Graphics g, Point p1, Point p2, SchetsControl s)
     {
-        s.Schets.AddSketchElement(new SchetsElement(ElementType.Line, p1, p2, s.PenKleur));
+        GraphicsPath path = new GraphicsPath();
+        path.AddLine(p1, p2);
+        s.Schets.AddSketchElement(new SchetsElement(path, p1, p2, s.PenKleur));
     }
 }
 
@@ -178,12 +189,22 @@ public class GumTool : ISchetsTool
     
     public void MuisDrag(SchetsControl s, Point p)
     {
-        
+        for(LinkedListNode < SchetsElement > node = s.Schets.sketchElements.Last; node != null; node = node.Previous)
+        {
+            SchetsElement el = node.Value;
+            if (p.X >= el.bounds.Left && p.Y >= el.bounds.Top && p.X <= el.bounds.Right && p.Y <= el.bounds.Bottom)
+            {
+                s.Schets.sketchElements.Remove(node);
+                s.Schets.BitmapGraphics.FillRectangle(Brushes.White, 0, 0, s.Schets.bitmap.Width, s.Schets.bitmap.Height);
+                s.Invalidate();
+                break;
+            }
+        }
     }
     
     public void MuisLos(SchetsControl s, Point p)
     {
-        for(LinkedListNode<SchetsElement> node = s.Schets.sketchElements.Last; node != null; node = node.Previous)
+        for(LinkedListNode < SchetsElement > node = s.Schets.sketchElements.Last; node != null; node = node.Previous)
         {
             SchetsElement el = node.Value;
             if (p.X >= el.bounds.Left && p.Y >= el.bounds.Top && p.X <= el.bounds.Right && p.Y <= el.bounds.Bottom)
@@ -201,60 +222,37 @@ public class GumTool : ISchetsTool
     }
 }
 
-public enum ElementType
-{
-    FilledEllipse,
-    EmptyEllipse,
-    FilledRectangle,
-    EmptyRectangle,
-    Text,
-    Line,
-}
-
-
 public class SchetsElement
 {
-    public ElementType type { get; set; }
+    public GraphicsPath path { get; set;}
+    public bool isFilled { get; set; }
     public Point beginPunt { get; set; }
     public Point eindPunt { get; set; }
     public Color kleur { get; set; }
     public string? text { get; set; }
     public Rectangle bounds { get; set; }
 
-    public Guid uid { get; }
-
-    public SchetsElement(ElementType type, Point beginPunt, Point eindPunt, Color kleur, string? text = null)
+    public SchetsElement(GraphicsPath path, Point beginPunt, Point eindPunt, Color kleur, string? text = null, bool isFilled = false)
     {
-        this.type = type;
-        this.uid = Guid.NewGuid();
+        this.path = path;
+        this.isFilled = isFilled;
         this.beginPunt = beginPunt;
         this.eindPunt = eindPunt;
         this.kleur = kleur;
-        this.text = text;
+        this.text = text;s
         this.bounds = TweepuntTool.Punten2Rechthoek(beginPunt, eindPunt);
     }
 
-    public void DrawElement(Graphics gr)
+    public void Draw(Graphics gr)
     {
-        switch (type)
+        if (isFilled)
         {
-            case ElementType.EmptyEllipse:
-                gr.DrawEllipse(new Pen(kleur, 3), TweepuntTool.Punten2Rechthoek(beginPunt, eindPunt));
-                break;
-            case ElementType.FilledEllipse:
-                gr.FillEllipse(new SolidBrush(kleur), TweepuntTool.Punten2Rechthoek(beginPunt, eindPunt));
-                break;
-            case ElementType.EmptyRectangle:
-                gr.DrawRectangle(new Pen(kleur, 3), TweepuntTool.Punten2Rechthoek(beginPunt, eindPunt));
-                break;
-            case ElementType.FilledRectangle:
-                gr.FillRectangle(new SolidBrush(kleur), TweepuntTool.Punten2Rechthoek(beginPunt, eindPunt));
-                break;
-            case ElementType.Line:
-                gr.DrawLine(new Pen(kleur, 3), beginPunt, eindPunt);
-                break;
+            gr.FillPath(new SolidBrush(kleur), path);
         }
-            
+        else
+        {
+            gr.DrawPath(new Pen(kleur, 3), path);
+        }
     }
 
     

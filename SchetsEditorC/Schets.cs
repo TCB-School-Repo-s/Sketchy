@@ -37,7 +37,7 @@ public class Schets
     {
         foreach (SchetsElement element in sketchElements)
         {
-            element.DrawElement(this.BitmapGraphics);
+            element.Draw(this.BitmapGraphics);
         }
         gr.DrawImage(bitmap, 0, 0);
     }
