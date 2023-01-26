@@ -174,7 +174,7 @@ public class GumTool : PenTool
 
     public override void Bezig(Graphics g, Point p1, Point p2, SchetsControl s)
     {  
-        g.DrawLine(MaakPen(Brushes.White, 7), p1, p2);
+        
     }
 }
 

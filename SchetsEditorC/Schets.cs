@@ -54,15 +54,15 @@ public class Schets
         }
     }
 
-    public void SaveProject(Object o, EventArgs e)
+    public async void SaveProject(Object o, EventArgs e)
     {
         var project = JsonConvert.SerializeObject(sketchElements);
         using (SaveFileDialog saveFileDialog = new SaveFileDialog() { Filter = @"Sketchy|*.sketchy" })
         {
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                using StreamWriter file = new(saveFileDialog.FileName);
-                file.WriteLineAsync(project);
+                using StreamWriter fileToSave = new(saveFileDialog.FileName);
+                await fileToSave.WriteLineAsync(project);
             }
         }
     }
