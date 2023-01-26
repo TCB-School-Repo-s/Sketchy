@@ -160,26 +160,30 @@ public class SchetsWin : Form
         Button clear = new Button(); paneel.Controls.Add(clear);
         clear.Text = "Clear";  
         clear.Location = new Point(  0, 0); 
-        clear.Click += schetscontrol.Schoon;        
-            
+        clear.Click += schetscontrol.Schoon;
+
+        Button undo = new Button(); paneel.Controls.Add(undo);
+        undo.Text = "Undo";
+        undo.Location = new Point(80, 0);
+        undo.Click += schetscontrol.undo;
         Button rotate = new Button(); paneel.Controls.Add(rotate);
         rotate.Text = "Rotate"; 
-        rotate.Location = new Point( 80, 0); 
+        rotate.Location = new Point( 160, 0); 
         rotate.Click += schetscontrol.Roteer;
 
         Button saveimg = new Button(); paneel.Controls.Add(saveimg);
         saveimg.Text = "Save img";
-        saveimg.Location = new Point(160, 0);
+        saveimg.Location = new Point(240, 0);
         saveimg.Click += schetscontrol.Schets.SaveBitmap;
 
         Button openimg = new Button(); paneel.Controls.Add(openimg);
         openimg.Text = "Open img";
-        openimg.Location = new Point(240, 0);
+        openimg.Location = new Point(320, 0);
         openimg.Click += schetscontrol.OpenBitmap;
 
         Button kleurBttn = new Button(); paneel.Controls.Add(kleurBttn);
         kleurBttn.Text = "Kies kleur";
-        kleurBttn.Location = new Point(340, 0);
+        kleurBttn.Location = new Point(420, 0);
         kleurBttn.Click += KleurBttn_Click;
         
         /*ComboBox cbb = new ComboBox(); paneel.Controls.Add(cbb);

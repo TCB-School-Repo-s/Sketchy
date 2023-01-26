@@ -58,7 +58,6 @@ public class Schets
             {
                 this.sketchChanged = false;
                 bitmap.Save(saveFileDialog.FileName);
-                Debug.WriteLine(this.sketchChanged);
             }
         }
     }
@@ -71,6 +70,7 @@ public class Schets
         {
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
+                this.sketchChanged=false;
                 using StreamWriter fileToSave = new(saveFileDialog.FileName);
                 await fileToSave.WriteLineAsync(FinalFileData);
             }
