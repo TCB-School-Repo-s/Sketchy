@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 
 public class SchetsWin : Form
@@ -12,7 +11,6 @@ public class SchetsWin : Form
     ColorDialog colorDialog = new ColorDialog();
     Panel paneel;
     bool vast;
-    public bool changes;
     
     private void veranderAfmeting(object o, EventArgs ea)
     {

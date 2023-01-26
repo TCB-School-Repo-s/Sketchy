@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Security.Policy;
 using System.Text.Json.Serialization;
 using System.Xml.Linq;
 
@@ -169,15 +170,43 @@ public class LijnTool : TweepuntTool
     }
 }
 
-public class PenTool : LijnTool
+public class PenTool : ISchetsTool
 {
     public override string ToString() { return "pen"; }
 
-    public override void MuisDrag(SchetsControl s, Point p)
-    {   
-        this.MuisLos(s, p);
-        this.MuisVast(s, p);
+    private Point startpunt;
+    private GraphicsPath path = new GraphicsPath();
+    public void Letter(SchetsControl s, char c)
+    {
     }
+
+    public void MuisDrag(SchetsControl s, Point p)
+    {
+        this.Bezig(s, p, s.CreateGraphics());
+        startpunt = p;
+    }
+
+    public void MuisLos(SchetsControl s, Point p)
+    {
+        this.Compleet(s, p);
+    }
+
+    public void MuisVast(SchetsControl s, Point p)
+    {
+        startpunt = p;
+    }
+
+    public void Bezig(SchetsControl s, Point p, Graphics gr)
+    {
+        gr.DrawLine(new Pen(s.PenKleur, 3), startpunt, p);
+        path.AddLine(startpunt, p);
+    }
+
+    public void Compleet(SchetsControl s, Point p)
+    {
+        s.Schets.sketchElements.AddLast(new SchetsElement(path, startpunt, p ,s.PenKleur, null, false, true));
+    }
+
 }
 
 public class GumTool : ISchetsTool
@@ -192,7 +221,7 @@ public class GumTool : ISchetsTool
         for(LinkedListNode < SchetsElement > node = s.Schets.sketchElements.Last; node != null; node = node.Previous)
         {
             SchetsElement el = node.Value;
-            if (p.X >= el.bounds.Left && p.Y >= el.bounds.Top && p.X <= el.bounds.Right && p.Y <= el.bounds.Bottom)
+            if (el.CheckInBounds(p))
             {
                 s.Schets.sketchElements.Remove(node);
                 s.Schets.BitmapGraphics.FillRectangle(Brushes.White, 0, 0, s.Schets.bitmap.Width, s.Schets.bitmap.Height);
@@ -207,7 +236,7 @@ public class GumTool : ISchetsTool
         for(LinkedListNode < SchetsElement > node = s.Schets.sketchElements.Last; node != null; node = node.Previous)
         {
             SchetsElement el = node.Value;
-            if (p.X >= el.bounds.Left && p.Y >= el.bounds.Top && p.X <= el.bounds.Right && p.Y <= el.bounds.Bottom)
+            if (el.CheckInBounds(p))
             {
                 s.Schets.sketchElements.Remove(node);
                 s.Schets.BitmapGraphics.FillRectangle(Brushes.White, 0, 0, s.Schets.bitmap.Width, s.Schets.bitmap.Height);
@@ -226,21 +255,39 @@ public class SchetsElement
 {
     public GraphicsPath path { get; set;}
     public bool isFilled { get; set; }
+    public bool isPenTool { get; set; }
     public Point beginPunt { get; set; }
     public Point eindPunt { get; set; }
     public Color kleur { get; set; }
     public string? text { get; set; }
-    public Rectangle bounds { get; set; }
 
-    public SchetsElement(GraphicsPath path, Point beginPunt, Point eindPunt, Color kleur, string? text = null, bool isFilled = false)
+    public SchetsElement(GraphicsPath path, Point beginPunt, Point eindPunt, Color kleur, string? text = null, bool isFilled = false, bool isPenTool = false)
     {
         this.path = path;
         this.isFilled = isFilled;
         this.beginPunt = beginPunt;
         this.eindPunt = eindPunt;
         this.kleur = kleur;
-        this.text = text;s
-        this.bounds = TweepuntTool.Punten2Rechthoek(beginPunt, eindPunt);
+        this.text = text;
+        this.isPenTool = isPenTool;
+    }
+
+    public bool CheckInBounds(Point p)
+    {
+        RectangleF bounds = path.GetBounds();
+
+        if (isPenTool)
+        {
+            if (path.PathPoints.Contains(p)) return true;
+        }
+        else
+        {
+            if (p.X >= bounds.Left && p.X <= bounds.Right && p.Y >= bounds.Top && p.Y <= bounds.Bottom)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void Draw(Graphics gr)
