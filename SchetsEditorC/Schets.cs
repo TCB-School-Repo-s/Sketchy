@@ -37,7 +37,7 @@ public class Schets
     {
         foreach (SchetsElement element in sketchElements)
         {
-            element.DrawElement(this.BitmapGraphics);
+            element.Draw(this.BitmapGraphics);
         }
         gr.DrawImage(bitmap, 0, 0);
     }
@@ -56,7 +56,6 @@ public class Schets
         {   
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                this.sketchChanged = false;
                 bitmap.Save(saveFileDialog.FileName);
             }
         }
@@ -73,6 +72,7 @@ public class Schets
                 this.sketchChanged=false;
                 using StreamWriter fileToSave = new(saveFileDialog.FileName);
                 await fileToSave.WriteLineAsync(FinalFileData);
+                sketchChanged = false;
             }
         }
     }
