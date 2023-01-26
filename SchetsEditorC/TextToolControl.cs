@@ -10,7 +10,7 @@ public class TextToolControl : TextBox
 
     public TextToolControl()
     {
-        
+
     }
 
 
