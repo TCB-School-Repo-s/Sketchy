@@ -107,7 +107,7 @@ public class RechthoekTool : TweepuntTool
     {
         GraphicsPath path = new GraphicsPath();
         path.AddRectangle(Punten2Rechthoek(p1, p2));
-        s.Schets.AddSketchElement(new SchetsElement(path, p1, p2, s.PenKleur));
+        s.Schets.AddSketchElement(new SchetsElement(path, s.PenKleur));
     }
 }
     
@@ -119,7 +119,7 @@ public class VolRechthoekTool : RechthoekTool
     {
         GraphicsPath path = new GraphicsPath();
         path.AddRectangle(Punten2Rechthoek(p1, p2));
-        s.Schets.AddSketchElement(new SchetsElement(path, p1, p2, s.PenKleur, null, true));
+        s.Schets.AddSketchElement(new SchetsElement(path, s.PenKleur, null, true));
     }
 
 }
@@ -137,7 +137,7 @@ public class CirkelTool : TweepuntTool
     {
         GraphicsPath path = new GraphicsPath();
         path.AddEllipse(Punten2Rechthoek(p1, p2));
-        s.Schets.AddSketchElement(new SchetsElement(path, p1, p2, s.PenKleur));
+        s.Schets.AddSketchElement(new SchetsElement(path, s.PenKleur));
     }
 }
 
@@ -149,7 +149,7 @@ public class VolCirkelTool : CirkelTool
     {
         GraphicsPath path = new GraphicsPath();
         path.AddEllipse(Punten2Rechthoek(p1, p2));
-        s.Schets.AddSketchElement(new SchetsElement(path, p1, p2, s.PenKleur, null, true));
+        s.Schets.AddSketchElement(new SchetsElement(path, s.PenKleur, null, true));
     }
 }
 
@@ -166,7 +166,7 @@ public class LijnTool : TweepuntTool
     {
         GraphicsPath path = new GraphicsPath();
         path.AddLine(p1, p2);
-        s.Schets.AddSketchElement(new SchetsElement(path, p1, p2, s.PenKleur));
+        s.Schets.AddSketchElement(new SchetsElement(path, s.PenKleur));
     }
 }
 
@@ -204,7 +204,11 @@ public class PenTool : ISchetsTool
 
     public void Compleet(SchetsControl s, Point p)
     {
-        s.Schets.sketchElements.AddLast(new SchetsElement(path, startpunt, p ,s.PenKleur, null, false, true));
+        path.Flatten();
+        s.Schets.sketchElements.AddLast(new SchetsElement((GraphicsPath)path.Clone(), s.PenKleur, null, false, true));
+        s.Schets.BitmapGraphics.FillRectangle(Brushes.White, 0, 0, s.Schets.bitmap.Width, s.Schets.bitmap.Height);
+        s.Invalidate();
+        path.Reset();
     }
 
 }
@@ -256,22 +260,18 @@ public class SchetsElement
     public GraphicsPath path { get; set;}
     public bool isFilled { get; set; }
     public bool isPenTool { get; set; }
-    public Point beginPunt { get; set; }
-    public Point eindPunt { get; set; }
     public Color kleur { get; set; }
     public string? text { get; set; }
 
-    public SchetsElement(GraphicsPath path, Point beginPunt, Point eindPunt, Color kleur, string? text = null, bool isFilled = false, bool isPenTool = false)
+    public SchetsElement(GraphicsPath path, Color kleur, string? text = null, bool isFilled = false, bool isPenTool = false)
     {
         this.path = path;
         this.isFilled = isFilled;
-        this.beginPunt = beginPunt;
-        this.eindPunt = eindPunt;
         this.kleur = kleur;
         this.text = text;
         this.isPenTool = isPenTool;
     }
-
+    
     public bool CheckInBounds(Point p)
     {
         RectangleF bounds = path.GetBounds();
