@@ -179,20 +179,29 @@ public class GumTool : ISchetsTool
     public void Letter(SchetsControl s, char c)
     { 
     }
-
+    
     public void MuisDrag(SchetsControl s, Point p)
     {
         
     }
-
+    
     public void MuisLos(SchetsControl s, Point p)
     {
-        
+        for(LinkedListNode<SchetsElement> node = s.Schets.sketchElements.Last; node != null; node = node.Previous)
+        {
+            SchetsElement el = node.Value;
+            if (p.X >= el.beginPunt.X && p.Y >= el.beginPunt.Y && p.X <= el.eindPunt.X && p.Y <= el.eindPunt.Y)
+            {
+                s.Schets.sketchElements.Remove(node);
+                s.Schets.BitmapGraphics.FillRectangle(Brushes.White, 0, 0, s.Width, s.Height);
+                s.Invalidate();
+                break;
+            }
+        }
     }
 
     public void MuisVast(SchetsControl s, Point p)
     {
-        clickPoint = p;
     }
 }
 
@@ -215,11 +224,12 @@ public class SchetsElement
     public Color kleur { get; set; }
     public string? text { get; set; }
 
+    public Guid uid { get; }
 
-    [JsonConstructor]
     public SchetsElement(ElementType type, Point beginPunt, Point eindPunt, Color kleur, string? text = null)
     {
         this.type = type;
+        this.uid = Guid.NewGuid();
         this.beginPunt = beginPunt;
         this.eindPunt = eindPunt;
         this.kleur = kleur;
