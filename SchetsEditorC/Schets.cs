@@ -8,24 +8,32 @@ using System.IO;
 
 public class Schets
 {
-    public Bitmap bitmap { get; private set; }
+    public Bitmap bitmap {
+        get;
+        private set;
+    }
     public LinkedList<SchetsElement> sketchElements = new LinkedList<SchetsElement>();
     ColorDialog colorDialog = new ColorDialog();
-    public bool sketchChanged { get; set; }
+    public bool sketchChanged {
+        get;
+        set;
+    }
     public Schets()
     {
         bitmap = new Bitmap(1, 1);
     }
     public Graphics BitmapGraphics
     {
-        get { return Graphics.FromImage(bitmap); }
+        get {
+            return Graphics.FromImage(bitmap);
+        }
     }
     public void VeranderAfmeting(Size sz)
     {
         if (sz.Width > bitmap.Size.Width || sz.Height > bitmap.Size.Height)
         {
             Bitmap nieuw = new Bitmap( Math.Max(sz.Width,  bitmap.Size.Width)
-                                     , Math.Max(sz.Height, bitmap.Size.Height)
+                                       , Math.Max(sz.Height, bitmap.Size.Height)
                                      );
             Graphics gr = Graphics.FromImage(nieuw);
             gr.FillRectangle(Brushes.White, 0, 0, sz.Width, sz.Height);
@@ -52,8 +60,10 @@ public class Schets
 
     public void SaveBitmap(Object o, EventArgs e)
     {
-        using (SaveFileDialog saveFileDialog = new SaveFileDialog() { Filter = @"PNG|*.png|JPEG|*.jpeg|BMP|*.bmp" })
-        {   
+        using (SaveFileDialog saveFileDialog = new SaveFileDialog() {
+        Filter = @"PNG|*.png|JPEG|*.jpeg|BMP|*.bmp"
+    })
+        {
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 bitmap.Save(saveFileDialog.FileName);
@@ -65,7 +75,9 @@ public class Schets
     {
         SaveFileObject FileObject = new SaveFileObject(colorDialog.CustomColors, sketchElements);
         string FinalFileData = JsonConvert.SerializeObject(FileObject);
-        using (SaveFileDialog saveFileDialog = new SaveFileDialog() { Filter = @"Sketchy|*.sketchy" })
+        using (SaveFileDialog saveFileDialog = new SaveFileDialog() {
+        Filter = @"Sketchy|*.sketchy"
+    })
         {
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
@@ -79,7 +91,9 @@ public class Schets
 
     public void OpenProject()
     {
-        using (OpenFileDialog openFileDialog = new OpenFileDialog() { Filter = @"Sketchy|*.sketchy" })
+        using (OpenFileDialog openFileDialog = new OpenFileDialog() {
+        Filter = @"Sketchy|*.sketchy"
+    })
         {
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
@@ -92,7 +106,7 @@ public class Schets
             }
         }
     }
-    
+
     public void ImportBitmap(Bitmap bp)
     {
         bitmap = bp;
@@ -107,13 +121,13 @@ public class Schets
     {
         sketchElements.Remove(element);
     }
-    
+
     public void Schoon()
     {
         sketchElements.Clear();
         Graphics gr = Graphics.FromImage(bitmap);
         gr.FillRectangle(Brushes.White, 0, 0, bitmap.Width, bitmap.Height);
-        
+
     }
     public void Roteer()
     {
@@ -124,8 +138,14 @@ public class Schets
 
 public class SaveFileObject
 {
-    public int[] CustomColor { get; set; }
-    public LinkedList<SchetsElement> FileData { get; set; }
+    public int[] CustomColor {
+        get;
+        set;
+    }
+    public LinkedList<SchetsElement> FileData {
+        get;
+        set;
+    }
 
     public SaveFileObject(int[] colors, LinkedList<SchetsElement> data)
     {
