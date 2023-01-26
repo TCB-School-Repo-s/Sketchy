@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -46,6 +47,20 @@ public class SchetsControl : UserControl
     {   schets.VeranderAfmeting(new Size(this.ClientSize.Height, this.ClientSize.Width));
         schets.Roteer();
         this.Invalidate();
+    }
+    
+    public void undo(object o, EventArgs ea)
+    {
+        if (Schets.sketchElements.Count != 0)
+        {
+            schets.sketchElements.RemoveLast();
+            schets.BitmapGraphics.FillRectangle(Brushes.White,0,0,schets.bitmap.Width,schets.bitmap.Height);
+            this.Invalidate();
+        }
+        else
+        {
+            MessageBox.Show("There is nothing to undo!", "Error");
+        }
     }
     
     public void OpenProject(object o, EventArgs e)
