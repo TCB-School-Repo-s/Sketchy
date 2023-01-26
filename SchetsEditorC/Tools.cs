@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 public interface ISchetsTool
@@ -167,14 +170,29 @@ public class PenTool : LijnTool
         this.MuisVast(s, p);
     }
 }
-    
-public class GumTool : PenTool
+
+public class GumTool : ISchetsTool
 {
     public override string ToString() { return "gum"; }
 
-    public override void Bezig(Graphics g, Point p1, Point p2, SchetsControl s)
-    {  
+    private Point clickPoint;
+    public void Letter(SchetsControl s, char c)
+    { 
+    }
+
+    public void MuisDrag(SchetsControl s, Point p)
+    {
         
+    }
+
+    public void MuisLos(SchetsControl s, Point p)
+    {
+        
+    }
+
+    public void MuisVast(SchetsControl s, Point p)
+    {
+        clickPoint = p;
     }
 }
 

@@ -6,10 +6,11 @@ using System.Windows.Forms;
 public class SchetsControl : UserControl
 {   
     private Schets schets;
-    private Color penkleur;
+    private Color penkleur = Color.Black;
 
     public Color PenKleur
     { get { return penkleur; }
+        set { penkleur = value; }
     }
     public Schets Schets
     { get { return schets;   }
@@ -45,15 +46,7 @@ public class SchetsControl : UserControl
         schets.Roteer();
         this.Invalidate();
     }
-    public void VeranderKleur(object obj, EventArgs ea)
-    {   string kleurNaam = ((ComboBox)obj).Text;
-        penkleur = Color.FromName(kleurNaam);
-    }
-    public void VeranderKleurViaMenu(object obj, EventArgs ea)
-    {   string kleurNaam = ((ToolStripMenuItem)obj).Text;
-        penkleur = Color.FromName(kleurNaam);
-    }
-
+    
     public void OpenProject(object o, EventArgs e)
     {
         this.schets.OpenProject();

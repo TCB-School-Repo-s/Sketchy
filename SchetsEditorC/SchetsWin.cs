@@ -9,6 +9,7 @@ public class SchetsWin : Form
     MenuStrip menuStrip;
     SchetsControl schetscontrol;
     ISchetsTool huidigeTool;
+    ColorDialog colorDialog = new ColorDialog();
     Panel paneel;
     bool vast;
     public bool changes;
@@ -124,11 +125,7 @@ public class SchetsWin : Form
     {   
         ToolStripMenuItem menu = new ToolStripMenuItem("Actie");
         menu.DropDownItems.Add("Clear", null, schetscontrol.Schoon );
-        menu.DropDownItems.Add("Roteer", null, schetscontrol.Roteer );
-        ToolStripMenuItem submenu = new ToolStripMenuItem("Kies kleur");
-        foreach (string k in kleuren)
-            submenu.DropDownItems.Add(k, null, schetscontrol.VeranderKleurViaMenu);
-        menu.DropDownItems.Add(submenu);
+        menu.DropDownItems.Add("Roteer", null, schetscontrol.Roteer);
         menuStrip.Items.Add(menu);
         menu.DropDownItems.Add("Save project", null, schetscontrol.Schets.SaveProject);
         menu.DropDownItems.Add("Open project", null, schetscontrol.OpenProject);
@@ -180,17 +177,22 @@ public class SchetsWin : Form
         openimg.Location = new Point(240, 0);
         openimg.Click += schetscontrol.OpenBitmap;
 
-        Label penkleur = new Label(); paneel.Controls.Add(penkleur);
-        penkleur.Text = "Penkleur:"; 
-        penkleur.Location = new Point(340, 3); 
-        penkleur.AutoSize = true;               
-            
-        ComboBox cbb = new ComboBox(); paneel.Controls.Add(cbb);
+        Button kleurBttn = new Button(); paneel.Controls.Add(kleurBttn);
+        kleurBttn.Text = "Kies kleur";
+        kleurBttn.Location = new Point(340, 0);
+        kleurBttn.Click += KleurBttn_Click;
+        
+        /*ComboBox cbb = new ComboBox(); paneel.Controls.Add(cbb);
         cbb.Location = new Point(400, 0); 
         cbb.DropDownStyle = ComboBoxStyle.DropDownList; 
         cbb.SelectedValueChanged += schetscontrol.VeranderKleur;
         foreach (string k in kleuren)
             cbb.Items.Add(k);
-        cbb.SelectedIndex = 0;
+        cbb.SelectedIndex = 0;*/
+    }
+
+    private void KleurBttn_Click(object sender, EventArgs e)
+    {
+        this.schetscontrol.Schets.OpenColorDialog(this.schetscontrol);
     }
 }

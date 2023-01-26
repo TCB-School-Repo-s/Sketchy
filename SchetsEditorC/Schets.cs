@@ -10,6 +10,7 @@ public class Schets
 {
     private Bitmap bitmap;
     public LinkedList<SchetsElement> sketchElements = new LinkedList<SchetsElement>();
+    ColorDialog colorDialog = new ColorDialog();
     public bool sketchChanged { get; set; }
     public Schets()
     {
@@ -41,6 +42,14 @@ public class Schets
         gr.DrawImage(bitmap, 0, 0);
     }
 
+    public void OpenColorDialog(SchetsControl control)
+    {
+        if (colorDialog.ShowDialog() == DialogResult.OK)
+        {
+            control.PenKleur = colorDialog.Color;
+        }
+    }
+
     public void SaveBitmap(Object o, EventArgs e)
     {
         using (SaveFileDialog saveFileDialog = new SaveFileDialog() { Filter = @"PNG|*.png|JPEG|*.jpeg|BMP|*.bmp" })
@@ -56,13 +65,14 @@ public class Schets
 
     public async void SaveProject(Object o, EventArgs e)
     {
-        var project = JsonConvert.SerializeObject(sketchElements);
+        SaveFileObject FileObject = new SaveFileObject(colorDialog.CustomColors, sketchElements);
+        string FinalFileData = JsonConvert.SerializeObject(FileObject);
         using (SaveFileDialog saveFileDialog = new SaveFileDialog() { Filter = @"Sketchy|*.sketchy" })
         {
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 using StreamWriter fileToSave = new(saveFileDialog.FileName);
-                await fileToSave.WriteLineAsync(project);
+                await fileToSave.WriteLineAsync(FinalFileData);
             }
         }
     }
@@ -75,7 +85,9 @@ public class Schets
             {
                 using StreamReader file = new(openFileDialog.FileName);
                 var project = file.ReadToEnd();
-                sketchElements = JsonConvert.DeserializeObject<LinkedList<SchetsElement>>(project);
+                SaveFileObject saveFile = JsonConvert.DeserializeObject<SaveFileObject>(project);
+                sketchElements = saveFile.FileData;
+                colorDialog.CustomColors = saveFile.CustomColor;
                 Debug.WriteLine(sketchElements.First.Value.kleur);
             }
         }
@@ -108,4 +120,16 @@ public class Schets
         bitmap.RotateFlip(RotateFlipType.Rotate90FlipNone);
     }
 
+}
+
+public class SaveFileObject
+{
+    public int[] CustomColor { get; set; }
+    public LinkedList<SchetsElement> FileData { get; set; }
+
+    public SaveFileObject(int[] colors, LinkedList<SchetsElement> data)
+    {
+        this.CustomColor = colors;
+        this.FileData = data;
+    }
 }
