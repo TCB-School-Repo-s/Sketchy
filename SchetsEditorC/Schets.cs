@@ -56,6 +56,7 @@ public class Schets
         {   
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
+                this.sketchChanged=false;
                 bitmap.Save(saveFileDialog.FileName);
             }
         }
@@ -69,7 +70,7 @@ public class Schets
         {
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                this.sketchChanged=false;
+                
                 using StreamWriter fileToSave = new(saveFileDialog.FileName);
                 await fileToSave.WriteLineAsync(FinalFileData);
                 sketchChanged = false;
