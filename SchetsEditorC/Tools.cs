@@ -36,48 +36,41 @@ public class TekstTool : StartpuntTool {
   public override void MuisDrag(SchetsControl s, Point p) {}
 
   public override void Letter(SchetsControl s, KeyEventArgs e) {
-        if (e.KeyCode == Keys.Enter && e.Modifiers == Keys.Shift)
-        {
-            CurrentString += "\n";
-        }else if(e.KeyCode == Keys.Enter && e.Modifiers != Keys.Shift)
-        {
-            GraphicsPath path = new GraphicsPath();
-            path.AddString(CurrentString, this.font.FontFamily, (int)this.font.Style, this.font.Size + 5, startpunt, StringFormat.GenericDefault);
-            s.Schets.sketchElements.AddLast(new SchetsElement(new ElementPathData(path.PathTypes, path.PathPoints), s.PenKleur, true, false));
-            s.Schets.BitmapGraphics.FillRectangle(
-        Brushes.White, 0, 0, s.Schets.bitmap.Width, s.Schets.bitmap.Height);
-            s.Invalidate();
-            CurrentString = "";
+    if (e.KeyCode == Keys.Enter && e.Modifiers == Keys.Shift) {
+      CurrentString += "\n";
+    } else if (e.KeyCode == Keys.Enter && e.Modifiers != Keys.Shift) {
+      GraphicsPath path = new GraphicsPath();
+      path.AddString(CurrentString, this.font.FontFamily, (int)this.font.Style,
+                     this.font.Size + 5, startpunt,
+                     StringFormat.GenericDefault);
+      s.Schets.sketchElements.AddLast(new SchetsElement(
+          new ElementPathData(path.PathTypes, path.PathPoints), s.PenKleur,
+          true, false));
+      s.Schets.BitmapGraphics.FillRectangle(
+          Brushes.White, 0, 0, s.Schets.bitmap.Width, s.Schets.bitmap.Height);
+      s.Invalidate();
+      CurrentString = "";
+    } else if (e.KeyCode == Keys.Back) {
+      if (CurrentString.Length > 0) {
+        Size size = TextRenderer.MeasureText(CurrentString, font);
+        s.CreateGraphics().FillRectangle(Brushes.White, startpunt.X,
+                                         startpunt.Y, size.Width, size.Height);
+        CurrentString = CurrentString.Substring(0, CurrentString.Length - 1);
+      }
+    } else if (e.KeyCode == Keys.Space) {
+      CurrentString += " ";
+    } else {
+      if (Char.IsLetter((char)e.KeyValue) ||
+          Char.IsSeparator((char)e.KeyValue) ||
+          Char.IsPunctuation((char)e.KeyValue)) {
+        if (e.Modifiers == Keys.Shift || e.Modifiers == Keys.CapsLock) {
+          CurrentString += e.KeyCode.ToString();
+        } else {
+          CurrentString += e.KeyCode.ToString().ToLower();
         }
-        else if (e.KeyCode == Keys.Back)
-        {
-            if (CurrentString.Length > 0)
-            {
-                Size size = TextRenderer.MeasureText(CurrentString, font);
-                s.CreateGraphics().FillRectangle(
-        Brushes.White, startpunt.X, startpunt.Y, size.Width, size.Height);
-                CurrentString = CurrentString.Substring(0, CurrentString.Length - 1);
-            }
-        }
-        else if(e.KeyCode == Keys.Space)
-        {
-            CurrentString += " ";
-        }
-        else
-        {
-            if(Char.IsLetter((char)e.KeyValue) || Char.IsSeparator((char)e.KeyValue) || Char.IsPunctuation((char)e.KeyValue))
-            {
-                if(e.Modifiers == Keys.Shift || e.Modifiers == Keys.CapsLock)
-                {
-                    CurrentString += e.KeyCode.ToString();
-                }
-                else
-                {
-                    CurrentString += e.KeyCode.ToString().ToLower();
-                }
-            }
-        }
-        s.CreateGraphics().DrawString(CurrentString, font, kwast, startpunt);
+      }
+    }
+    s.CreateGraphics().DrawString(CurrentString, font, kwast, startpunt);
   }
 }
 
@@ -124,7 +117,8 @@ public class RechthoekTool : TweepuntTool {
                                 SchetsControl s) {
     GraphicsPath path = new GraphicsPath();
     path.AddRectangle(Punten2Rechthoek(p1, p2));
-    s.Schets.AddSketchElement(new SchetsElement(new ElementPathData(path.PathTypes, path.PathPoints), s.PenKleur));
+    s.Schets.AddSketchElement(new SchetsElement(
+        new ElementPathData(path.PathTypes, path.PathPoints), s.PenKleur));
   }
 }
 
@@ -135,7 +129,9 @@ public class VolRechthoekTool : RechthoekTool {
                                 SchetsControl s) {
     GraphicsPath path = new GraphicsPath();
     path.AddRectangle(Punten2Rechthoek(p1, p2));
-    s.Schets.AddSketchElement(new SchetsElement(new ElementPathData(path.PathTypes, path.PathPoints), s.PenKleur, true));
+    s.Schets.AddSketchElement(
+        new SchetsElement(new ElementPathData(path.PathTypes, path.PathPoints),
+                          s.PenKleur, true));
   }
 }
 
@@ -150,7 +146,8 @@ public class CirkelTool : TweepuntTool {
                                 SchetsControl s) {
     GraphicsPath path = new GraphicsPath();
     path.AddEllipse(Punten2Rechthoek(p1, p2));
-    s.Schets.AddSketchElement(new SchetsElement(new ElementPathData(path.PathTypes, path.PathPoints), s.PenKleur));
+    s.Schets.AddSketchElement(new SchetsElement(
+        new ElementPathData(path.PathTypes, path.PathPoints), s.PenKleur));
   }
 }
 
@@ -161,7 +158,9 @@ public class VolCirkelTool : CirkelTool {
                                 SchetsControl s) {
     GraphicsPath path = new GraphicsPath();
     path.AddEllipse(Punten2Rechthoek(p1, p2));
-    s.Schets.AddSketchElement(new SchetsElement(new ElementPathData(path.PathTypes, path.PathPoints), s.PenKleur, true));
+    s.Schets.AddSketchElement(
+        new SchetsElement(new ElementPathData(path.PathTypes, path.PathPoints),
+                          s.PenKleur, true));
   }
 }
 
@@ -176,7 +175,8 @@ public class LijnTool : TweepuntTool {
                                 SchetsControl s) {
     GraphicsPath path = new GraphicsPath();
     path.AddLine(p1, p2);
-    s.Schets.AddSketchElement(new SchetsElement(new ElementPathData(path.PathTypes, path.PathPoints), s.PenKleur));
+    s.Schets.AddSketchElement(new SchetsElement(
+        new ElementPathData(path.PathTypes, path.PathPoints), s.PenKleur));
   }
 }
 
@@ -203,8 +203,9 @@ public class PenTool : ISchetsTool {
 
   public void Compleet(SchetsControl s, Point p) {
     path.Flatten();
-    s.Schets.sketchElements.AddLast(new SchetsElement
-        (new ElementPathData(path.PathTypes, path.PathPoints), s.PenKleur, false, true));
+    s.Schets.sketchElements.AddLast(
+        new SchetsElement(new ElementPathData(path.PathTypes, path.PathPoints),
+                          s.PenKleur, false, true));
     s.Schets.BitmapGraphics.FillRectangle(
         Brushes.White, 0, 0, s.Schets.bitmap.Width, s.Schets.bitmap.Height);
     s.Invalidate();
@@ -253,8 +254,8 @@ public class SchetsElement {
   public bool isPenTool { get; set; }
   public Color kleur { get; set; }
 
-  public SchetsElement(ElementPathData data, Color kleur,
-                       bool isFilled = false, bool isPenTool = false) {
+  public SchetsElement(ElementPathData data, Color kleur, bool isFilled = false,
+                       bool isPenTool = false) {
     this.data = data;
     this.isFilled = isFilled;
     this.kleur = kleur;
@@ -289,15 +290,12 @@ public class SchetsElement {
   }
 }
 
-public class ElementPathData
-{
-    public byte[] type { get; set; }
-    public PointF[] points { get; set; }
+public class ElementPathData {
+  public byte[] type { get; set; }
+  public PointF[] points { get; set; }
 
-    public ElementPathData(byte[] type, PointF[] points)
-    {
-        this.type = type;
-        this.points = points;
-    }
-
+  public ElementPathData(byte[] type, PointF[] points) {
+    this.type = type;
+    this.points = points;
+  }
 }
