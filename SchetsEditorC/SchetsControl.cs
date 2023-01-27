@@ -5,17 +5,23 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 public class SchetsControl : UserControl
-{   
+{
     private Schets schets;
     private Color penkleur = Color.Black;
     private LinkedList<SchetsElement> redoList = new LinkedList<SchetsElement>();
 
     public Color PenKleur
-    { get { return penkleur; }
-        set { penkleur = value; }
+{   get {
+            return penkleur;
+        }
+        set {
+            penkleur = value;
+        }
     }
     public Schets Schets
-    { get { return schets;   }
+{   get {
+            return schets;
+        }
     }
     public SchetsControl()
     {   this.BorderStyle = BorderStyle.Fixed3D;
@@ -49,7 +55,7 @@ public class SchetsControl : UserControl
         schets.Roteer();
         this.Invalidate();
     }
-    
+
     public void undo(object o, EventArgs ea)
     {
         if (Schets.sketchElements.Count != 0)
@@ -79,7 +85,7 @@ public class SchetsControl : UserControl
             MessageBox.Show("There is nothing to redo!", "Error");
         }
     }
-    
+
     public void OpenProject(object o, EventArgs e)
     {
         this.schets.OpenProject();
@@ -99,5 +105,5 @@ public class SchetsControl : UserControl
         }
         this.Invalidate();
     }
-    
+
 }
