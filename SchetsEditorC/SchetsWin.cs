@@ -79,8 +79,8 @@ public class SchetsWin : Form
                                         huidigeTool.MuisLos(schetscontrol, mea.Location);
                                         vast = false; 
                                     };
-        schetscontrol.KeyPress +=  (object o, KeyPressEventArgs kpea) => 
-                                    {   huidigeTool.Letter  (schetscontrol, kpea.KeyChar); 
+        schetscontrol.KeyDown +=  (object o, KeyEventArgs kpea) => 
+                                    {   huidigeTool.Letter  (schetscontrol, kpea); 
                                     };
         this.Controls.Add(schetscontrol);
 
@@ -127,6 +127,7 @@ public class SchetsWin : Form
         menuStrip.Items.Add(menu);
         menu.DropDownItems.Add("Save project", null, schetscontrol.Schets.SaveProject);
         menu.DropDownItems.Add("Open project", null, schetscontrol.OpenProject);
+        menu.DropDownItems.Add("Export Image", null, schetscontrol.Schets.SaveBitmap);
     }
 
     private void maakToolButtons(ICollection<ISchetsTool> tools)
@@ -164,24 +165,25 @@ public class SchetsWin : Form
         undo.Text = "Undo";
         undo.Location = new Point(80, 0);
         undo.Click += schetscontrol.undo;
+        
+        Button redo = new Button(); paneel.Controls.Add(redo);
+        redo.Text = "Redo";
+        redo.Location = new Point(160, 0);
+        redo.Click += schetscontrol.redo;
+
         Button rotate = new Button(); paneel.Controls.Add(rotate);
         rotate.Text = "Rotate"; 
-        rotate.Location = new Point( 160, 0); 
+        rotate.Location = new Point(220, 0); 
         rotate.Click += schetscontrol.Roteer;
 
-        Button saveimg = new Button(); paneel.Controls.Add(saveimg);
-        saveimg.Text = "Save img";
-        saveimg.Location = new Point(240, 0);
-        saveimg.Click += schetscontrol.Schets.SaveBitmap;
-
         Button openimg = new Button(); paneel.Controls.Add(openimg);
-        openimg.Text = "Open img";
-        openimg.Location = new Point(320, 0);
+        openimg.Text = "Import img";
+        openimg.Location = new Point(300, 0);
         openimg.Click += schetscontrol.OpenBitmap;
 
         Button kleurBttn = new Button(); paneel.Controls.Add(kleurBttn);
         kleurBttn.Text = "Kies kleur";
-        kleurBttn.Location = new Point(420, 0);
+        kleurBttn.Location = new Point(380, 0);
         kleurBttn.Click += KleurBttn_Click;
         
         /*ComboBox cbb = new ComboBox(); paneel.Controls.Add(cbb);
