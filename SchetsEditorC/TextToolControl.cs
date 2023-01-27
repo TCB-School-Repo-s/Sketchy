@@ -7,5 +7,5 @@ using System.Windows.Forms;
 
 public class TextToolControl : TextBox {
 
-    public TextToolControl() {}
+  public TextToolControl() {}
 }
