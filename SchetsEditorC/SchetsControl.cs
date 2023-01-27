@@ -8,6 +8,7 @@ public class SchetsControl : UserControl
 {   
     private Schets schets;
     private Color penkleur = Color.Black;
+    private LinkedList<SchetsElement> redoList = new LinkedList<SchetsElement>();
 
     public Color PenKleur
     { get { return penkleur; }
@@ -53,6 +54,7 @@ public class SchetsControl : UserControl
     {
         if (Schets.sketchElements.Count != 0)
         {
+            this.redoList.AddLast(Schets.sketchElements.Last.Value);
             schets.sketchElements.RemoveLast();
             schets.BitmapGraphics.FillRectangle(Brushes.White,0,0,schets.bitmap.Width,schets.bitmap.Height);
             this.Invalidate();
@@ -60,6 +62,17 @@ public class SchetsControl : UserControl
         else
         {
             MessageBox.Show("There is nothing to undo!", "Error");
+        }
+    }
+
+    public void redo(object o, EventArgs e)
+    {
+        if(this.redoList.Count != 0)
+        {
+            schets.sketchElements.AddLast(redoList.Last.Value);
+            redoList.RemoveLast();
+            schets.BitmapGraphics.FillRectangle(Brushes.White, 0, 0, schets.bitmap.Width, schets.bitmap.Height);
+            Invalidate();
         }
     }
     
