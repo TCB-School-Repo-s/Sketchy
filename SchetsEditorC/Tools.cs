@@ -217,17 +217,7 @@ public class GumTool : ISchetsTool {
   public void Letter(SchetsControl s, KeyEventArgs e) {}
 
   public void MuisDrag(SchetsControl s, Point p) {
-    for (LinkedListNode<SchetsElement> node = s.Schets.sketchElements.Last;
-         node != null; node = node.Previous) {
-      SchetsElement el = node.Value;
-      if (el.CheckInBounds(p)) {
-        s.Schets.sketchElements.Remove(node);
-        s.Schets.BitmapGraphics.FillRectangle(
-            Brushes.White, 0, 0, s.Schets.bitmap.Width, s.Schets.bitmap.Height);
-        s.Invalidate();
-        break;
-      }
-    }
+        this.MuisLos(s, p);
   }
 
   public void MuisLos(SchetsControl s, Point p) {
