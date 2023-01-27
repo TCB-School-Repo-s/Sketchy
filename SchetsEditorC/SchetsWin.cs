@@ -173,19 +173,17 @@ public class SchetsWin : Form
 
         Button rotate = new Button(); paneel.Controls.Add(rotate);
         rotate.Text = "Rotate"; 
-        rotate.Location = new Point(240, 0); 
+        rotate.Location = new Point(220, 0); 
         rotate.Click += schetscontrol.Roteer;
 
-       
-
         Button openimg = new Button(); paneel.Controls.Add(openimg);
-        openimg.Text = "Import Image";
-        openimg.Location = new Point(420, 0);
+        openimg.Text = "Import img";
+        openimg.Location = new Point(300, 0);
         openimg.Click += schetscontrol.OpenBitmap;
 
         Button kleurBttn = new Button(); paneel.Controls.Add(kleurBttn);
         kleurBttn.Text = "Kies kleur";
-        kleurBttn.Location = new Point(500, 0);
+        kleurBttn.Location = new Point(380, 0);
         kleurBttn.Click += KleurBttn_Click;
         
         /*ComboBox cbb = new ComboBox(); paneel.Controls.Add(cbb);
