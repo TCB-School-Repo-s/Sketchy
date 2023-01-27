@@ -74,6 +74,10 @@ public class SchetsControl : UserControl
             schets.BitmapGraphics.FillRectangle(Brushes.White, 0, 0, schets.bitmap.Width, schets.bitmap.Height);
             Invalidate();
         }
+        else
+        {
+            MessageBox.Show("There is nothing to redo!", "Error");
+        }
     }
     
     public void OpenProject(object o, EventArgs e)
